@@ -1,0 +1,57 @@
+/*
+for (i in 0:n)
+{
+	print(i)
+}
+
+for (i in c(0:n))
+{
+	print(i)
+}
+
+for (i in c(values[separated by comma]))
+{
+	print(i)
+}
+*/
+
+grammar R;
+
+start : assign
+	  | forLoop
+	  | whileLoop
+	  | forLoop start
+	  | whileLoop start 
+	  | statement
+	  | assign start
+	  | statement start
+
+assign : factor ASSIGNMENTS expr
+
+factor : ID
+	   | NUMBER
+
+expr : expr PLUS term
+	 | expr MINUS term
+	 | term
+
+term : term MULTIPLE factor
+	 | term DIVIDE factor
+	 | factor
+	   
+stament : PRINT LEFTPAREN ID RIGHTPAREN
+
+/* first line of the FOR LOOP */
+forLoop : FOR inner LEFTCURLY statement RIGHTCURLY
+
+inner : LEFTPAREN VAR IN range RIGHTPAREN
+	  | LEFTPAREN VAR IN vector RIGHTPAREN
+
+
+range : LPAREN NUMBER COLON NUMBER RPAREN
+	  | NUMBER COLON NUMBER 
+
+vector : C LEFTPAREN NUMBER COLON NUMBER RIGHTPAREN
+	   | C LEFTPAREN VALUES RIGHTPAREN
+
+
