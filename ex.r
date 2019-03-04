@@ -1,10 +1,8 @@
-cnt <- 2
+n <- 10
+#this is a comment
 
-#fuvkljgk
-#fjksehda
-
-
-while (cnt < 7) {
-
-   cnt = cnt + 1
+for (i in (0:n))
+{
+	# this is another comment
+	print(i)
 }
