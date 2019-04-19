@@ -1,4 +1,10 @@
 import ply.lex as lex
+from symbolTable import MainSymbolTable
+from symbolTable import SymbolTable
+
+main_table = MainSymbolTable()
+main_table.add_table(SymbolTable(main_table.outScope))
+
 
 reserved = {
    'while': 'WHILE',
@@ -7,7 +13,9 @@ reserved = {
    'True': 'TRUE',
    'False' : 'FALSE',
    'in' : 'IN',
-   'print' : 'PRINT'	
+   'print' : 'PRINT',
+   'if' : 'IF',
+   'else' : 'ELSE'
 }
 
 comparators = ['LESSTHAN','GREATERTHAN','EQUALS','NOTEQUALS','LESSTHANOREQUAL','GREATERTHANOREQUAL']
@@ -76,7 +84,11 @@ def t_COMPARATORS(t):
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')
+    if t.value in reserved:
+        t.type = t.value.upper()
+    if t.type == 'ID':
+        symbol_table = main_table.get_table(main_table.inScope-1)
+        symbol_table.add_entry(t)
     return t
 
 
@@ -98,4 +110,15 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-lex.lex()
+lexer = lex.lex()
+
+# f = open('ex1.r')
+# data = f.read()
+# lexer.input(data)
+# while True:
+#     tok = lexer.token()
+#     if not tok:
+#         break
+    # print(tok)
+
+# main_table.print_table()
